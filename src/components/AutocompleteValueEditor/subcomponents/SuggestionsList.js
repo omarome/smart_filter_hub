@@ -13,6 +13,8 @@ const SuggestionsList = ({
   onSuggestionSelect,
   onSuggestionHover,
   editorId,
+  listTestId,
+  itemTestIdPrefix,
 }) => {
   if (!suggestions || suggestions.length === 0) {
     return null;
@@ -37,6 +39,7 @@ const SuggestionsList = ({
       ref={suggestionsRef}
       role="listbox"
       aria-label="Suggestions"
+      data-testid={listTestId}
       style={{
         '--suggestions-top': `${position.top}px`,
         '--suggestions-left': `${position.left}px`,
@@ -54,6 +57,7 @@ const SuggestionsList = ({
             onMouseEnter={() => onSuggestionHover(index)}
             role="option"
             aria-selected={index === selectedIndex}
+            data-testid={itemTestIdPrefix ? `${itemTestIdPrefix}-${index}` : undefined}
           >
             {String(suggestion)}
           </li>
@@ -76,6 +80,8 @@ SuggestionsList.propTypes = {
   onSuggestionSelect: PropTypes.func.isRequired,
   onSuggestionHover: PropTypes.func.isRequired,
   editorId: PropTypes.string.isRequired,
+  listTestId: PropTypes.string,
+  itemTestIdPrefix: PropTypes.string,
 };
 
 export default SuggestionsList;

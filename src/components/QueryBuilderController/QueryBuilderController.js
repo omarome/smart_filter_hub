@@ -126,17 +126,23 @@ const QueryBuilderController = ({
   }, [isExpanded]);
 
   return (
-    <div className="query-builder-controller" ref={containerRef}>
+    <div
+      className="query-builder-controller"
+      ref={containerRef}
+      data-testid="query-builder-controller"
+    >
       <CollapseButton
         isExpanded={isExpanded}
         onToggle={handleToggle}
         expandedLabel={expandedLabel}
         collapsedLabel={collapsedLabel}
+        data-testid="advanced-filters-toggle"
       />
 
       {isExpanded && (
         <div 
           className={`query-builder-controller__content ${hasSuggestionsOpen ? 'query-builder-controller__content--has-suggestions' : ''}`}
+          data-testid="query-builder-content"
         >
           <QueryBuilder
             fields={fields}

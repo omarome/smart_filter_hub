@@ -22,6 +22,8 @@ const InputWrapper = ({
   onClear,
   fieldData,
   className,
+  inputTestId,
+  clearButtonTestId,
   ariaActivedescendant,
   ariaAutocomplete,
   ariaExpanded,
@@ -40,6 +42,7 @@ const InputWrapper = ({
         placeholder={placeholder || 'Enter value...'}
         disabled={disabled}
         className="autocomplete-value-editor__input"
+        data-testid={inputTestId}
         aria-invalid={showValidation && !isValid}
         aria-describedby={showValidation ? `validation-${fieldData.name || 'value'}` : undefined}
         aria-activedescendant={ariaActivedescendant}
@@ -55,6 +58,7 @@ const InputWrapper = ({
           onClick={onClear}
           aria-label="Clear value"
           tabIndex={-1}
+          data-testid={clearButtonTestId}
         >
           <ClearIcon fontSize="small" />
         </button>
@@ -87,6 +91,8 @@ InputWrapper.propTypes = {
   onClear: PropTypes.func.isRequired,
   fieldData: PropTypes.object,
   className: PropTypes.string.isRequired,
+  inputTestId: PropTypes.string,
+  clearButtonTestId: PropTypes.string,
   ariaActivedescendant: PropTypes.string,
   ariaAutocomplete: PropTypes.string,
   ariaExpanded: PropTypes.bool,

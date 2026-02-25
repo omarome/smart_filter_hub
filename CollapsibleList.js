@@ -47,14 +47,17 @@ const CollapsibleList = () => {
   ];
 
   return (
-    <div className="collapsible-list">
+    <div className="collapsible-list" data-testid="collapsible-list">
       <QueryBuilderController
         fields={fields}
         operators={operators}
         label="Advanced filters"
         onQueryChange={handleQueryChange}
       />
-      <ResultsTable data={filteredData} columns={tableColumns} />
+      <ResultsTable
+        data={filteredData}
+        columns={tableColumns}
+      />
     </div>
   );
 };

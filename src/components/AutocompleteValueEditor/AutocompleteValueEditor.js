@@ -115,6 +115,11 @@ const AutocompleteValueEditor = ({
     ...safeInputProps
   } = props;
 
+  const baseTestId = useMemo(
+    () => (testID ? String(testID) : editorIdRef.current),
+    [testID]
+  );
+
   // Build wrapper classes (memoized for performance)
   const wrapperClasses = useMemo(() => [
     'autocomplete-value-editor__input-wrapper',
@@ -168,7 +173,11 @@ const AutocompleteValueEditor = ({
   );
 
   return (
-    <div className={containerClasses} ref={containerRef}>
+    <div
+      className={containerClasses}
+      ref={containerRef}
+      data-testid={`${baseTestId}-container`}
+    >
       <InputWrapper
         inputValue={inputValue}
         inputRef={inputRef}
@@ -184,6 +193,8 @@ const AutocompleteValueEditor = ({
         onClear={handleClear}
         fieldData={fieldData}
         className={wrapperClasses}
+        inputTestId={`${baseTestId}-input`}
+        clearButtonTestId={hasClearButton ? `${baseTestId}-clear` : undefined}
         ariaActivedescendant={activeDescendantId}
         ariaAutocomplete="list"
         ariaExpanded={hasSuggestionsOpen}
@@ -205,6 +216,8 @@ const AutocompleteValueEditor = ({
           onSuggestionSelect={handleSuggestionSelect}
           onSuggestionHover={setSelectedIndex}
           editorId={editorIdRef.current}
+          listTestId={`${baseTestId}-suggestions`}
+          itemTestIdPrefix={`${baseTestId}-suggestion-item`}
         />
       )}
     </div>
