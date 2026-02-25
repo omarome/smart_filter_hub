@@ -2,7 +2,7 @@
 
 A React demo application that showcases a collapsible **advanced filters panel** built on top of `react-querybuilder`, with an **autocomplete value editor** and a live-updating results table.
 
-![Query Builder component preview](./public/images/filter_with_suggestions.png)
+![Query Builder component preview](./public/images/filters_with_suggestions.png)
 
 ### Features
 
