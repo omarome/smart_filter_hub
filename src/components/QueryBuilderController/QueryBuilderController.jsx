@@ -1,23 +1,11 @@
 import React, { useState, useMemo, useCallback, useRef } from 'react';
 import { QueryBuilder } from 'react-querybuilder';
 import PropTypes from 'prop-types';
-import CollapseButton from '../CollapseButton';
-import AutocompleteValueEditor from '../AutocompleteValueEditor';
+import CollapseButton from '../CollapseButton/CollapseButton';
+import AutocompleteValueEditor from '../AutocompleteValueEditor/AutocompleteValueEditor';
 import { countRules } from '../../utils/queryUtils';
 import './QueryBuilderController.less';
 import './QueryBuilderController.query-builder.css';
-
-/**
- * Query Builder Controller Component
- * Manages the query builder state and provides a collapsible interface
- * 
- * @param {array} fields - Array of field definitions for the query builder
- * @param {array} operators - Array of operator definitions
- * @param {object} initialQuery - Initial query state
- * @param {function} onQueryChange - Callback when query changes
- * @param {string} label - Label prefix for the button (e.g., "Advanced filters")
- * @param {object} queryBuilderProps - Additional props to pass to QueryBuilder
- */
 const QueryBuilderController = ({
   fields,
   operators,

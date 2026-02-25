@@ -1,13 +1,4 @@
 import { useEffect, useRef } from 'react';
-
-/**
- * Custom hook for managing suggestions state and notifying parent
- * 
- * @param {boolean} showSuggestions - Whether suggestions are visible
- * @param {number} filteredSuggestionsLength - Number of filtered suggestions
- * @param {function} onSuggestionsChange - Callback to notify parent
- * @param {string} editorId - Unique editor identifier
- */
 export const useSuggestionsState = (
   showSuggestions,
   filteredSuggestionsLength,

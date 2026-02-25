@@ -1,12 +1,4 @@
 import { useMemo } from 'react';
-
-/**
- * Custom hook for managing autocomplete suggestions
- * 
- * @param {array} values - Array of available value options
- * @param {string} inputValue - Current input value
- * @returns {array} - Filtered suggestions based on input
- */
 export const useAutocompleteSuggestions = (values, inputValue) => {
   // Extract suggestions from values array
   const suggestions = useMemo(() => {

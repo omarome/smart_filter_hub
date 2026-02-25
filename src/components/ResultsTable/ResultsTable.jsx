@@ -1,15 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './ResultsTable.less';
-
-/**
- * ResultsTable Component
- * Displays filtered data in a table format based on query builder rules
- * 
- * @param {array} data - Array of data items to display
- * @param {array} columns - Array of column definitions
- * @param {boolean} isLoading - Whether data is loading
- */
 const ResultsTable = ({ data, columns, isLoading = false }) => {
   if (isLoading) {
     return (

@@ -1,17 +1,4 @@
 import { useCallback } from 'react';
-
-/**
- * Custom hook for keyboard navigation in suggestions
- * 
- * @param {boolean} showSuggestions - Whether suggestions are visible
- * @param {array} filteredSuggestions - Array of filtered suggestions
- * @param {number} selectedIndex - Currently selected suggestion index
- * @param {function} setSelectedIndex - Function to update selected index
- * @param {function} handleSuggestionSelect - Function to handle suggestion selection
- * @param {function} setShowSuggestions - Function to close suggestions
- * @param {string} inputValue - Current input value
- * @returns {function} - Keyboard event handler
- */
 export const useKeyboardNavigation = (
   showSuggestions,
   filteredSuggestions,

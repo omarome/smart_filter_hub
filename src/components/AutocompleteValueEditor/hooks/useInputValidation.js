@@ -1,13 +1,4 @@
 import { useState, useEffect, useMemo } from 'react';
-
-/**
- * Custom hook for input validation
- * 
- * @param {string} inputValue - Current input value
- * @param {object} fieldData - Field metadata including validator
- * @param {string} operator - Current operator
- * @returns {object} - Validation state { isValid, error }
- */
 export const useInputValidation = (inputValue, fieldData, operator) => {
   const [validationError, setValidationError] = useState(null);
 

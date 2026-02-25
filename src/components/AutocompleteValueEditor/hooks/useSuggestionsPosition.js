@@ -1,11 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-
-/**
- * Throttle function to limit how often a function can be called
- * @param {function} func - Function to throttle
- * @param {number} limit - Time limit in milliseconds
- * @returns {function} - Throttled function
- */
 const throttle = (func, limit) => {
   let inThrottle;
   return function(...args) {
@@ -17,14 +10,6 @@ const throttle = (func, limit) => {
   };
 };
 
-/**
- * Custom hook for calculating suggestions position for portal
- * 
- * @param {boolean} showSuggestions - Whether suggestions are visible
- * @param {number} filteredSuggestionsLength - Number of filtered suggestions
- * @param {object} inputRef - Ref to the input element
- * @returns {object} - Position coordinates { top, left, width }
- */
 export const useSuggestionsPosition = (showSuggestions, filteredSuggestionsLength, inputRef) => {
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
   const throttledUpdateRef = useRef(null);

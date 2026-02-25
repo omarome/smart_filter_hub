@@ -1,14 +1,6 @@
 /**
  * Utility functions for field configuration and validation
  */
-
-/**
- * Extracts unique values from data for a given field
- * 
- * @param {array} data - Array of data objects
- * @param {string} fieldName - Name of the field to extract values from
- * @returns {array} - Array of unique values sorted alphabetically
- */
 export const extractUniqueValues = (data, fieldName) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return [];
@@ -31,13 +23,6 @@ export const extractUniqueValues = (data, fieldName) => {
   }));
 };
 
-/**
- * Creates a validator function for a field
- * 
- * @param {string} fieldName - Name of the field
- * @param {string} fieldType - Type of field (e.g., 'string', 'number', 'email')
- * @returns {function} - Validator function
- */
 export const createFieldValidator = (fieldName, fieldType = 'string') => {
   return (value, context) => {
     // Safely extract operator from context (context might be undefined)
@@ -95,13 +80,6 @@ export const createFieldValidator = (fieldName, fieldType = 'string') => {
   };
 };
 
-/**
- * Creates field configuration with values and validators
- * 
- * @param {array} data - Data array to extract values from
- * @param {object} fieldConfig - Field configuration object
- * @returns {object} - Enhanced field configuration
- */
 export const enhanceFieldWithValues = (data, fieldConfig) => {
   const { name, label, type = 'string', values: customValues } = fieldConfig;
 

@@ -8,23 +8,11 @@ import {
   useKeyboardNavigation,
   useSuggestionsState,
 } from './hooks';
-import { InputWrapper, SuggestionsList, ValidationMessage } from './components';
+import InputWrapper from './parts/InputWrapper';
+import SuggestionsList from './parts/SuggestionsList';
+import ValidationMessage from './parts/ValidationMessage';
 import './AutocompleteValueEditor.less';
 
-/**
- * Custom Autocomplete Value Editor for React Query Builder
- * Provides autocomplete suggestions, clear button, and validation feedback
- * 
- * @param {string} value - Current input value
- * @param {function} handleOnChange - Callback when value changes
- * @param {array} values - Array of available value options
- * @param {object} fieldData - Field metadata including validator
- * @param {string} operator - Current operator
- * @param {string} inputType - HTML input type
- * @param {boolean} disabled - Whether input is disabled
- * @param {string} placeholder - Placeholder text
- * @param {function} onSuggestionsChange - Callback when suggestions open/close state changes
- */
 const AutocompleteValueEditor = ({
   value = '',
   handleOnChange,

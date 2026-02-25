@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import 'react-querybuilder/dist/query-builder.css';
-import QueryBuilderController from './src/components/QueryBuilderController';
-import ResultsTable from './src/components/ResultsTable';
+import QueryBuilderController from './src/components/QueryBuilderController/QueryBuilderController';
+import ResultsTable from './src/components/ResultsTable/ResultsTable';
 import { filterData } from './src/utils/queryFilter';
 import { mockUsers } from './src/data/mockData';
 import { enhanceFieldWithValues } from './src/utils/fieldUtils';

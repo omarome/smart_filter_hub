@@ -1,14 +1,6 @@
 /**
  * Utility functions for filtering data based on query builder rules
  */
-
-/**
- * Evaluates a single rule against a data item
- * 
- * @param {object} rule - The rule object from react-querybuilder
- * @param {object} item - The data item to evaluate
- * @returns {boolean} - Whether the item matches the rule
- */
 const evaluateRule = (rule, item) => {
   const { field, operator, value } = rule;
   
@@ -45,13 +37,6 @@ const evaluateRule = (rule, item) => {
   }
 };
 
-/**
- * Evaluates a rule group (which can contain rules and/or nested groups)
- * 
- * @param {object} ruleGroup - The rule group object
- * @param {object} item - The data item to evaluate
- * @returns {boolean} - Whether the item matches the rule group
- */
 const evaluateRuleGroup = (ruleGroup, item) => {
   if (!ruleGroup.rules || ruleGroup.rules.length === 0) {
     return true; // Empty group, pass through
@@ -76,13 +61,6 @@ const evaluateRuleGroup = (ruleGroup, item) => {
   }
 };
 
-/**
- * Filters an array of data items based on a query builder query
- * 
- * @param {array} data - Array of data items to filter
- * @param {object} query - The query object from react-querybuilder
- * @returns {array} - Filtered array of data items
- */
 export const filterData = (data, query) => {
   if (!data || !Array.isArray(data)) {
     return [];

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CollapseButton from '../components/CollapseButton';
+import CollapseButton from '../components/CollapseButton/CollapseButton';
 
 /**
  * Example demonstrating how to use CollapseButton in different contexts

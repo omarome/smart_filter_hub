@@ -3,17 +3,6 @@ import PropTypes from 'prop-types';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import './CollapseButton.less';
-
-/**
- * Reusable collapse button component
- * 
- * @param {boolean} isExpanded - Whether the content is currently expanded
- * @param {function} onToggle - Callback function when button is clicked
- * @param {string} expandedLabel - Label to show when expanded
- * @param {string} collapsedLabel - Label to show when collapsed
- * @param {string} className - Additional CSS classes
- * @param {object} buttonProps - Additional props to pass to the button element
- */
 const CollapseButton = ({
   isExpanded,
   onToggle,
