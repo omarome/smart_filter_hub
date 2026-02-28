@@ -6,12 +6,20 @@ const evaluateRule = (rule, item) => {
   
   if (!field || !operator) return true; // Invalid rule, pass through
 
-   // Treat empty values as "no-op" so partially filled rules don't exclude everything
+  const fieldValue = item[field];
+
+  // Handle null / notNull operators first — they don't use a value
+  if (operator === 'null') {
+    return fieldValue === null || fieldValue === undefined;
+  }
+  if (operator === 'notNull') {
+    return fieldValue !== null && fieldValue !== undefined;
+  }
+
+  // Treat empty values as "no-op" so partially filled rules don't exclude everything
   if (value === null || value === undefined || String(value).trim() === '') {
     return true;
   }
-  
-  const fieldValue = item[field];
   const ruleValue = value;
 
   // Handle boolean fields (checkbox value comes as true/false or "true"/"false")

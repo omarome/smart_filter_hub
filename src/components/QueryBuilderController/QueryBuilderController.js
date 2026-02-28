@@ -99,29 +99,18 @@ const QueryBuilderController = ({
     },
   }), [handleSuggestionsChange]);
 
-  // Determine value editor type based on field configuration
+  // Determine value editor type from field configuration.
+  // Operators are already set per-field in queryConfig.js (the library reads
+  // field.operators natively), so no getOperators callback is needed.
   const getValueEditorType = useCallback((_field, _operator, { fieldData }) => {
-    // Boolean fields → render as radio buttons
-    if (fieldData?.valueEditorType === 'radio' || fieldData?.type === 'boolean') {
-      return 'radio';
+    // If the field already declares a valueEditorType (radio, checkbox, select, etc.)
+    // honour it directly — this is the library's recommended pattern.
+    if (fieldData?.valueEditorType) {
+      return fieldData.valueEditorType;
     }
 
-    // Fields with suggestion values → text (handled by AutocompleteValueEditor)
-    if (fieldData?.values && Array.isArray(fieldData.values) && fieldData.values.length > 0) {
-      return 'text';
-    }
-
-    return fieldData?.valueEditorType || 'text';
+    return 'text';
   }, []);
-
-  // Restrict operators for specific field types (e.g. boolean → only "=")
-  const getOperators = useCallback((_field, { fieldData }) => {
-    if (fieldData?.type === 'boolean') {
-      return [{ name: '=', label: '=' }];
-    }
-    // Return the default operators passed as prop
-    return operators;
-  }, [operators]);
 
   // Close panel when clicking outside for better UX
   useEffect(() => {
@@ -179,7 +168,6 @@ const QueryBuilderController = ({
             showCombinatorsBetweenRules={true}
             showNotToggle={true}
             getValueEditorType={getValueEditorType}
-            getOperators={getOperators}
             controlElements={customControls}
             {...queryBuilderProps}
           />

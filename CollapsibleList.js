@@ -44,6 +44,7 @@ const CollapsibleList = () => {
     { key: 'age', label: 'Age' },
     { key: 'email', label: 'Email' },
     { key: 'status', label: 'Status' },
+    { key: 'nickname', label: 'Nickname' },
     { key: 'isOnline', label: 'Is Online' },
   ];
 

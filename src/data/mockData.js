@@ -11,6 +11,7 @@ export const mockUsers = [
     email: 'john.doe@example.com',
     status: 'Active',
     isOnline: true,
+    nickname: 'Johnny',
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ export const mockUsers = [
     email: 'jane.smith@example.com',
     status: 'Active',
     isOnline: false,
+    nickname: null,
   },
   {
     id: 3,
@@ -29,6 +31,7 @@ export const mockUsers = [
     email: 'bob.johnson@example.com',
     status: 'Inactive',
     isOnline: false,
+    nickname: 'Bobby',
   },
   {
     id: 4,
@@ -38,6 +41,7 @@ export const mockUsers = [
     email: 'alice.williams@example.com',
     status: 'Active',
     isOnline: true,
+    nickname: null,
   },
   {
     id: 5,
@@ -47,6 +51,7 @@ export const mockUsers = [
     email: 'charlie.brown@example.com',
     status: 'Pending',
     isOnline: true,
+    nickname: 'Chuck',
   },
   {
     id: 6,
@@ -56,6 +61,7 @@ export const mockUsers = [
     email: 'diana.davis@example.com',
     status: 'Active',
     isOnline: false,
+    nickname: null,
   },
   {
     id: 7,
@@ -65,6 +71,7 @@ export const mockUsers = [
     email: 'edward.miller@example.com',
     status: 'Inactive',
     isOnline: false,
+    nickname: 'Ed',
   },
   {
     id: 8,
@@ -74,6 +81,7 @@ export const mockUsers = [
     email: 'fiona.wilson@example.com',
     status: 'Active',
     isOnline: true,
+    nickname: null,
   },
   {
     id: 9,
@@ -83,6 +91,7 @@ export const mockUsers = [
     email: 'george.moore@example.com',
     status: 'Pending',
     isOnline: false,
+    nickname: 'Geo',
   },
   {
     id: 10,
@@ -92,5 +101,6 @@ export const mockUsers = [
     email: 'helen.taylor@example.com',
     status: 'Active',
     isOnline: true,
+    nickname: null,
   },
 ];

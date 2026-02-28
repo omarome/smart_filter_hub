@@ -80,26 +80,23 @@ export const createFieldValidator = (fieldName, fieldType = 'string') => {
   };
 };
 
+/**
+ * Enhances a field config with dynamic values extracted from data and a
+ * validator function.  Fields that already declare their own `valueEditorType`
+ * (e.g. boolean / radio / checkbox) are returned as-is — their config is
+ * fully defined in queryConfig.js, following the library's recommended pattern.
+ */
 export const enhanceFieldWithValues = (data, fieldConfig) => {
-  const { name, label, type = 'string', values: customValues } = fieldConfig;
+  const { name, label, type = 'string', values: existingValues, valueEditorType } = fieldConfig;
 
-  // Boolean fields use radio buttons with True / False labels.
-  // They don't need suggestion values or a custom validator.
-  if (type === 'boolean') {
-    return {
-      ...fieldConfig,
-      valueEditorType: 'radio',
-      values: [
-        { name: 'true', label: 'True' },
-        { name: 'false', label: 'False' },
-      ],
-      defaultValue: 'true',
-      operators: [{ name: '=', label: '=' }],
-    };
+  // Fields that already have a non-text editor type (radio, checkbox, select, etc.)
+  // are fully configured in queryConfig.js — nothing to enhance.
+  if (valueEditorType && valueEditorType !== 'text') {
+    return fieldConfig;
   }
 
-  // Use custom values if provided, otherwise extract from data
-  const values = customValues || extractUniqueValues(data, name);
+  // Extract suggestion values from data (or use any custom values already set)
+  const values = existingValues || extractUniqueValues(data, name);
 
   // Create validator based on field type
   const validator = createFieldValidator(label || name, type);
@@ -108,6 +105,6 @@ export const enhanceFieldWithValues = (data, fieldConfig) => {
     ...fieldConfig,
     values,
     validator,
-    valueEditorType: 'text', // Will be handled by custom editor
+    valueEditorType: 'text', // Will be handled by custom AutocompleteValueEditor
   };
 };
