@@ -1,6 +1,7 @@
 node_modules
 dist
 build
+coverage
 .git
 .gitignore
 .env.local
@@ -10,3 +11,14 @@ build
 .vscode
 .idea
 .DS_Store
+.pnpm-store
+**/__tests__
+**/*.test.js
+**/*.spec.js
+jest.config.cjs
+babel.config.cjs
+eslint.config.js
+.prettierrc
+.eslintcache
+src/setupTests.js
+src/examples
