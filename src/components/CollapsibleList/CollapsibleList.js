@@ -1,15 +1,15 @@
 import React, { useCallback, useState, useMemo, useEffect, useRef } from 'react';
 import 'react-querybuilder/dist/query-builder.css';
-import QueryBuilderController from './src/components/QueryBuilderController/QueryBuilderController';
-import ResultsTable from './src/components/ResultsTable/ResultsTable';
-import DataSourceBanner from './src/components/DataSourceBanner/DataSourceBanner';
-import { filterData } from './src/utils/queryFilter';
-import { fetchUsers, fetchVariables } from './src/services/userApi';
-import { enhanceFieldWithValues } from './src/utils/fieldUtils';
-import { buildFieldsFromVariables } from './src/config/queryConfig';
-import { mockUsers } from './src/data/mockData';
-import { mockVariables } from './src/data/mockVariables';
-import './src/styles/CollapsibleList.less';
+import QueryBuilderController from '../QueryBuilderController/QueryBuilderController';
+import ResultsTable from '../ResultsTable/ResultsTable';
+import DataSourceBanner from '../DataSourceBanner/DataSourceBanner';
+import { filterData } from '../../utils/queryFilter';
+import { fetchUsers, fetchVariables } from '../../services/userApi';
+import { enhanceFieldWithValues } from '../../utils/fieldUtils';
+import { buildFieldsFromVariables } from '../../config/queryConfig';
+import { mockUsers } from '../../data/mockData';
+import { mockVariables } from '../../data/mockVariables';
+import '../../styles/CollapsibleList.less';
 
 /**
  * CollapsibleList Component

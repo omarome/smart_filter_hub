@@ -1,5 +1,6 @@
 import React from 'react';
-import CollapsibleList from '../CollapsibleList';
+import CollapsibleList from './components/CollapsibleList/CollapsibleList';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import './styles/App.less';
 
 /**
@@ -13,7 +14,9 @@ function App() {
   return (
     <div className="app">
       <h1>{import.meta.env.VITE_APP_TITLE || 'Smart Filter Hub'}</h1>
-      <CollapsibleList />
+      <ErrorBoundary>
+        <CollapsibleList />
+      </ErrorBoundary>
     </div>
   );
 }

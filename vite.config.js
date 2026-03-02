@@ -29,6 +29,9 @@ export default defineConfig({
       jsx: 'automatic',
     },
   },
+  build: {
+    sourcemap: false,
+  },
   css: {
     preprocessorOptions: {
       less: {
