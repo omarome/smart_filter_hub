@@ -2,7 +2,7 @@
 
 A production-ready React application for dynamic data filtering, built on top of [React Query Builder](https://react-querybuilder.js.org/). It connects to a Spring Boot backend for live data and field definitions, with automatic fallback to local mock data when the API is unavailable.
 
-![Query Builder component preview](./public/images/filters_with_suggestions.png)
+![Query Builder component preview](./public/images/filters_with_suggestions_march.png)
 
 ### Features
 
