@@ -31,27 +31,47 @@ A production-ready React application for dynamic data filtering, built on top of
 | Backend | Spring Boot (separate repository) |
 | Package Manager | pnpm |
 
-### Setup
+### Production Deployment
 
-1. **Install dependencies**
+#### Using Docker Compose (Recommended)
 
-```bash
-pnpm install
-```
+1. Ensure you have Docker and Docker Compose installed
+2. Update environment variables in `docker-compose.yml` for security
+3. Run the full application:
+   ```bash
+   docker-compose up -d
+   ```
+4. Access the application at `http://localhost`
 
-2. **Start the backend** (optional — the app falls back to mock data if unavailable)
+#### Manual Deployment
 
-The Spring Boot backend should be running at `http://localhost:8080` with these endpoints:
-- `GET /api/users` — user data
-- `GET /api/variables` — field definitions (name, label, type, offset)
+1. Build the frontend:
+   ```bash
+   npm run build
+   ```
 
-3. **Start the development server**
+2. Serve the `dist` folder with any static file server (NGINX, Apache, etc.)
 
-```bash
-pnpm start
-```
+3. Configure the API base URL:
+   ```bash
+   export VITE_API_BASE_URL=/api  # For same-domain deployment
+   # or
+   export VITE_API_BASE_URL=https://your-api-domain.com/api  # For cross-domain
+   ```
 
-The app will be available at `http://localhost:5173` (or the port shown in the terminal).
+### Environment Variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `VITE_API_BASE_URL` | `/api` | Backend API base URL |
+
+### Security Considerations
+
+- The application uses HTTP Basic Auth for API access
+- Ensure the backend is properly secured in production
+- Use HTTPS in production
+- Change default API credentials
+- Configure proper CORS settings if needed
 
 ### Usage
 
