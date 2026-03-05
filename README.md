@@ -63,7 +63,7 @@ A production-ready React application for dynamic data filtering, built on top of
 
 | Variable | Default | Description |
 |---|---|---|
-| `VITE_API_BASE_URL` | `/api` | Backend API base URL |
+| `EXAMPLE` | `/api` | Backend API base URL |
 
 ### Security Considerations
 
