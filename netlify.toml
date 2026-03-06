@@ -2,11 +2,12 @@
   command = "pnpm run build"
   publish = "dist"
 
-[build.environment]
-  # Netlify's secrets scanner is very aggressive and will flag any occurrence
-  # of the word "SECRET" in generated bundles (React uses
-  # `__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED` everywhere).  The
-  # build does not actually contain any real credentials, so we explicitly
-  # tell Netlify to ignore those substrings.  We also keep the API variable in
-  # the list just in case it ever resurfaces.
-  SECRETS_SCAN_OMIT_KEYS = "SECRET SECRET_INTERNALS API_BASE_URL VITE_API_BASE_URL"
+# The secrets scanning omit list cannot appear directly in repo files because
+# Netlify flags the value itself as a secret.  Instead, configure the
+# following environment variable in the Netlify web UI (Site settings →
+# Build & deploy → Environment → Add variable):
+#
+#   SECRETS_SCAN_OMIT_KEYS = "SECRET SECRET_INTERNALS API_BASE_URL VITE_API_BASE_URL"
+#
+# This tells the scanner to ignore the common React internal strings that
+# otherwise trigger false positives during the build.
