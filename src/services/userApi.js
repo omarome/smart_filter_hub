@@ -5,13 +5,13 @@
  *   - Development: http://localhost:8080/api  (direct to Spring Boot)
  *   - Production:  /api                       (NGINX reverse proxy)
  */
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const API_KEY = import.meta.env.VITE_API_BASE_URL || '/api';
 
 /**
  * Fetches all users from the backend API.
  */
 export const fetchUsers = async () => {
-  const response = await fetch(`${API_BASE_URL}/users`);
+  const response = await fetch(`${API_KEY}/users`);
   if (!response.ok) {
     throw new Error(`Failed to fetch users: ${response.status}`);
   }
@@ -23,7 +23,7 @@ export const fetchUsers = async () => {
  * Each variable has: id, name, label, offset, type (UDINT, STRING, BOOL, etc.)
  */
 export const fetchVariables = async () => {
-  const response = await fetch(`${API_BASE_URL}/variables`);
+  const response = await fetch(`${API_KEY}/variables`);
   if (!response.ok) {
     throw new Error(`Failed to fetch variables: ${response.status}`);
   }
