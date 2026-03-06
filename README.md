@@ -53,6 +53,23 @@ pnpm start
 
 The app will be available at `http://localhost:5173` (or the port shown in the terminal).
 
+### Environment Variables
+
+The application uses Vite environment variables (prefixed with `VITE_`). These can be set in a `.env` file for local development or in your deployment platform (Netlify, Vercel, etc.).
+
+| Name | Description | Default |
+|------|-------------|---------|
+| `VITE_API_BASE_URL` | Base URL for the backend API. Should include `/api` suffix if using proxy. | `/api` |
+| `VITE_API_USERNAME` | HTTP Basic auth username for API requests. Leave blank to disable authentication. | *(none)* |
+| `VITE_API_PASSWORD` | HTTP Basic auth password for API requests. | *(none)* |
+| `VITE_APP_TITLE` | Text displayed in the header. | `Smart Filter Hub` |
+| `VITE_BANNER_DURATION` | Milliseconds before the live/mock notification banner auto-dismisses. | `3000` |
+
+In Netlify, define the variables under **Site settings → Build & deploy → Environment**. Do **not** commit a `.env` file containing secrets; configure them via the platform or local tooling.
+
+> **Note:** the Netlify secrets scanner will ignore keys listed in the `SECRETS_SCAN_OMIT_KEYS` build variable. Add `VITE_API_USERNAME` and `VITE_API_PASSWORD` there if you prefer the scanner to skip them.
+
+
 ### Usage
 
 1. On startup, a **notification banner** indicates whether the app is connected to the backend (green) or using mock data (orange). It auto-dismisses after 5 seconds.
