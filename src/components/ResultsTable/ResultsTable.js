@@ -2,7 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../../styles/ResultsTable.less';
 
-const ResultsTable = ({ data, columns, isLoading = false, testIdPrefix = 'results-table' }) => {
+const ResultsTable = ({ 
+  data, 
+  columns, 
+  isLoading = false, 
+  testIdPrefix = 'results-table',
+  currentPage = 1,
+  totalItems = 0,
+  itemsPerPage = 10,
+  onPageChange
+}) => {
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
   if (isLoading) {
     return (
       <div className="results-table" data-testid={testIdPrefix}>
@@ -30,7 +41,7 @@ const ResultsTable = ({ data, columns, isLoading = false, testIdPrefix = 'result
           className="results-table__title section-title"
           data-testid={`${testIdPrefix}-title`}
         >
-          Results ({data.length} {data.length === 1 ? 'item' : 'items'})
+          Results ({totalItems} {totalItems === 1 ? 'item' : 'items'})
         </h3>
         <div className="bulk-actions">
           <span className="bulk-label">Bulk Actions:</span>
@@ -121,10 +132,22 @@ const ResultsTable = ({ data, columns, isLoading = false, testIdPrefix = 'result
         </table>
       </div>
       <div className="table-footer">
-        <span className="page-info">Page 1 of 4</span>
+        <span className="page-info">Page {currentPage} of {totalPages}</span>
         <div className="pagination-btns">
-          <button className="pagination-btn disabled">Previous</button>
-          <button className="pagination-btn">Next</button>
+          <button 
+            className={`pagination-btn ${currentPage === 1 ? 'disabled' : ''}`}
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <button 
+            className={`pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`}
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>
@@ -141,6 +164,10 @@ ResultsTable.propTypes = {
   ).isRequired,
   isLoading: PropTypes.bool,
   testIdPrefix: PropTypes.string,
+  currentPage: PropTypes.number,
+  totalItems: PropTypes.number,
+  itemsPerPage: PropTypes.number,
+  onPageChange: PropTypes.func,
 };
 
 export default ResultsTable;

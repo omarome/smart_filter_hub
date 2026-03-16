@@ -17,10 +17,13 @@ import '../../styles/CollapsibleList.less';
  * - Falls back to mock data when the API is unreachable
  * - Shows a one-time banner indicating the data source
  */
+const ITEMS_PER_PAGE = 10;
+
 const CollapsibleList = () => {
   const [users, setUsers] = useState([]);
   const [variables, setVariables] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [query, setQuery] = useState({
     combinator: 'and',
     rules: [],
@@ -77,12 +80,24 @@ const CollapsibleList = () => {
 
   const handleQueryChange = useCallback((newQuery) => {
     setQuery(newQuery);
+    setCurrentPage(1); // Reset to first page on query change
   }, []);
 
   // Filter data based on query (client-side filtering)
   const filteredData = useMemo(() => {
     return filterData(users, query);
   }, [users, query]);
+
+  // Handle page change
+  const handlePageChange = useCallback((page) => {
+    setCurrentPage(page);
+  }, []);
+
+  // Slice data for pagination
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredData, currentPage]);
 
   // Derive table columns from variables (uses label from the backend / mock)
   const tableColumns = useMemo(() => {
@@ -119,7 +134,11 @@ const CollapsibleList = () => {
 
       <div className="results-container animate-fade delay-400">
         <ResultsTable
-          data={filteredData}
+          data={paginatedData}
+          totalItems={filteredData.length}
+          itemsPerPage={ITEMS_PER_PAGE}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
           columns={tableColumns}
           isLoading={isLoading}
         />
