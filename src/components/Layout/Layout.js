@@ -4,17 +4,25 @@ import { Typography, IconButton, Badge, Tooltip, Menu, MenuItem, ListItemIcon, D
 import { LucideLayers, LucideSearch, LucideBell, LucideMoon, LucideSun, LucideMenu, LucideX, LucideLogOut, LucideUser } from 'lucide-react';
 import { useAuth } from '../../context/AuthProvider';
 import { useThemeControl } from '../../context/ThemeContext';
+import { useNotifications } from '../../context/NotificationContext';
+import NotificationMenu from '../NotificationMenu/NotificationMenu';
 import '../../styles/Layout.less';
 
 const Layout = ({ children, sidebarContent, analyticsContent, bannerContent, modalsContent }) => {
   const { user, logout } = useAuth();
   const { mode, toggleTheme } = useThemeControl();
+  const { unreadCount } = useNotifications();
   const location = useLocation();
   const navigate = useNavigate();
   const isHub = location.pathname === '/';
 
   // Use a single state for sidebar visibility across all screen sizes
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 1024);
+
+  // Notification Menu State
+  const [notifAnchorEl, setNotifAnchorEl] = useState(null);
+  const handleNotifOpen = (event) => setNotifAnchorEl(event.currentTarget);
+  const handleNotifClose = () => setNotifAnchorEl(null);
 
   // Profile Menu State
   const [anchorEl, setAnchorEl] = useState(null);
@@ -63,11 +71,17 @@ const Layout = ({ children, sidebarContent, analyticsContent, bannerContent, mod
           </div>
 
           <div className="header-right">
-            <IconButton className="header-action">
-              <Badge color="error" variant="dot">
+            <IconButton className="header-action" onClick={handleNotifOpen}>
+              <Badge 
+                color="error" 
+                badgeContent={unreadCount} 
+                variant={unreadCount > 0 ? "standard" : "dot"}
+                invisible={unreadCount === 0}
+              >
                 <LucideBell size={20} />
               </Badge>
             </IconButton>
+            <NotificationMenu anchorEl={notifAnchorEl} onClose={handleNotifClose} />
             <IconButton className="header-action" onClick={toggleTheme}>
               {mode === 'light' ? <LucideMoon size={20} /> : <LucideSun size={20} />}
             </IconButton>

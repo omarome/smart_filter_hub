@@ -111,3 +111,73 @@ export const deleteSavedView = async (id) => {
   return true;
 };
 
+// ─── Notification API ────────────────────────────────────────────────────────
+
+/**
+ * Fetches all notifications from the backend, ordered newest first.
+ */
+export const fetchNotifications = async () => {
+  const response = await fetch(`${API_BASE}/notifications`, {
+    headers: getAuthHeader()
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch notifications: ${response.status}`);
+  }
+  return response.json();
+};
+
+/**
+ * Marks a single notification as read.
+ * @param {number|string} id
+ */
+export const markNotificationRead = async (id) => {
+  const response = await fetch(`${API_BASE}/notifications/${id}/read`, {
+    method: 'PUT',
+    headers: getAuthHeader()
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to mark notification as read: ${response.status}`);
+  }
+};
+
+/**
+ * Marks all notifications as read.
+ */
+export const markAllNotificationsRead = async () => {
+  const response = await fetch(`${API_BASE}/notifications/read-all`, {
+    method: 'PUT',
+    headers: getAuthHeader()
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to mark all notifications as read: ${response.status}`);
+  }
+};
+
+/**
+ * Deletes a single notification.
+ * @param {number|string} id
+ */
+export const deleteNotification = async (id) => {
+  const response = await fetch(`${API_BASE}/notifications/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeader()
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to delete notification: ${response.status}`);
+  }
+  return true;
+};
+
+/**
+ * Deletes all notifications.
+ */
+export const deleteAllNotifications = async () => {
+  const response = await fetch(`${API_BASE}/notifications`, {
+    method: 'DELETE',
+    headers: getAuthHeader()
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to delete all notifications: ${response.status}`);
+  }
+  return true;
+};

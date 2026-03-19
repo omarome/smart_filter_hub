@@ -1,11 +1,11 @@
 import React, { useMemo, useCallback, useState, useEffect } from 'react';
-import { 
-  LucideZap, 
-  LucidePlusCircle, 
-  LucideFilter, 
-  LucideUsers, 
-  LucideClock, 
-  LucideTrendingDown, 
+import {
+  LucideZap,
+  LucidePlusCircle,
+  LucideFilter,
+  LucideUsers,
+  LucideClock,
+  LucideTrendingDown,
   LucideUserMinus,
   LucideArrowRight,
   LucideTrash2
@@ -23,8 +23,8 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
     try {
       const savedQuery = JSON.parse(savedQueryJson);
       // Simple stringify comparison for exact match
-      return JSON.stringify(query.rules) === JSON.stringify(savedQuery.rules) && 
-             query.combinator === savedQuery.combinator;
+      return JSON.stringify(query.rules) === JSON.stringify(savedQuery.rules) &&
+        query.combinator === savedQuery.combinator;
     } catch (e) {
       return false;
     }
@@ -55,7 +55,7 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
   // ── Reactive Update Helper ─────────────────────────────
   const updateGlobalQuery = useCallback((statuses, age, type) => {
     // Preserve rules that AREN'T handled by the Quick Filter sidebar
-    const otherRules = query.rules.filter(r => 
+    const otherRules = query.rules.filter(r =>
       r.field !== 'status' && r.field !== 'age' && r.field !== 'userType'
     );
     const newRules = [...otherRules];
@@ -80,7 +80,7 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
     const nextStatuses = localSelectedStatuses.includes(status)
       ? localSelectedStatuses.filter(s => s !== status)
       : [...localSelectedStatuses, status];
-    
+
     setLocalSelectedStatuses(nextStatuses);
     updateGlobalQuery(nextStatuses, localAgeRange, localUserType);
   }, [localSelectedStatuses, localAgeRange, localUserType, updateGlobalQuery]);
@@ -117,7 +117,7 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
 
   // Filter saved views based on search query
   const filteredSavedViews = useMemo(() => {
-    return savedViews.filter(view => 
+    return savedViews.filter(view =>
       view.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [savedViews, searchQuery]);
@@ -131,30 +131,29 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
           <LucideZap size={16} className="title-icon zap-icon" />
         </div>
         <div className="card-body">
-...existing UI...
           <div className="filter-field">
             <label className="field-label">User Status</label>
             <div className="checkbox-group">
               <label className="checkbox-item">
-                <input 
-                  type="checkbox" 
-                  checked={isStatusChecked('Active')} 
+                <input
+                  type="checkbox"
+                  checked={isStatusChecked('Active')}
                   onChange={() => handleStatusToggle('Active')}
                 />
                 <span className="badge badge-active">Active</span>
               </label>
               <label className="checkbox-item">
-                <input 
-                  type="checkbox" 
-                  checked={isStatusChecked('Inactive')} 
+                <input
+                  type="checkbox"
+                  checked={isStatusChecked('Inactive')}
                   onChange={() => handleStatusToggle('Inactive')}
                 />
                 <span className="badge badge-inactive">Inactive</span>
               </label>
               <label className="checkbox-item">
-                <input 
-                  type="checkbox" 
-                  checked={isStatusChecked('Pending')} 
+                <input
+                  type="checkbox"
+                  checked={isStatusChecked('Pending')}
                   onChange={() => handleStatusToggle('Pending')}
                 />
                 <span className="badge badge-pending">Pending</span>
@@ -165,18 +164,18 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
           <div className="filter-field">
             <label className="field-label">Age Range</label>
             <div className="range-inputs">
-              <input 
-                type="number" 
-                placeholder="Min" 
-                className="filter-input" 
+              <input
+                type="number"
+                placeholder="Min"
+                className="filter-input"
                 value={localAgeRange.min}
                 onChange={(e) => handleAgeChange('min', e.target.value)}
               />
               <span className="range-separator">-</span>
-              <input 
-                type="number" 
-                placeholder="Max" 
-                className="filter-input" 
+              <input
+                type="number"
+                placeholder="Max"
+                className="filter-input"
                 value={localAgeRange.max}
                 onChange={(e) => handleAgeChange('max', e.target.value)}
               />
@@ -186,8 +185,8 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
 
           <div className="filter-field">
             <label className="field-label">User Type</label>
-            <select 
-              className="filter-select" 
+            <select
+              className="filter-select"
               value={localUserType}
               onChange={(e) => handleUserTypeChange(e.target.value)}
             >
@@ -209,19 +208,19 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
             <LucidePlusCircle size={16} />
           </button>
         </div>
-        
+
         {savedViews.length > 0 && (
           <div className="saved-filters-search">
-            <input 
-              type="text" 
-              placeholder="Search saved filters..." 
+            <input
+              type="text"
+              placeholder="Search saved filters..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="filter-input"
             />
           </div>
         )}
-        
+
         <nav className="saved-filters-nav custom-scrollbar">
           {savedViews.length === 0 ? (
             <div className="no-filters-msg">No saved views yet.</div>
@@ -232,7 +231,7 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
               const isActive = isSavedViewActive(view.queryJson);
               return (
                 <div key={view.id} className={`nav-item-wrapper ${isActive ? 'active' : ''}`}>
-                  <button 
+                  <button
                     className="nav-item-btn"
                     onClick={() => handleApplySavedView(view.queryJson)}
                     title={view.name}
@@ -244,8 +243,8 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
                   </button>
                   <div className="nav-item-actions">
                     {isActive && <span className="applied-pill">Applied</span>}
-                    <button 
-                      className="delete-view-btn" 
+                    <button
+                      className="delete-view-btn"
                       onClick={(e) => {
                         e.stopPropagation();
                         if (window.confirm(`Are you sure you want to delete "${view.name}"?`)) {

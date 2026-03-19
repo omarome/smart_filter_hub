@@ -17,6 +17,7 @@ import { mockUsers } from './data/mockData';
 import { mockVariables } from './data/mockVariables';
 import { AuthProvider, useAuth } from './context/AuthProvider';
 import { ThemeControlProvider, useThemeControl } from './context/ThemeContext';
+import { NotificationProvider } from './context/NotificationContext';
 import { Toaster, toast } from 'react-hot-toast';
 import EmailModal from './components/EmailModal/EmailModal';
 import ConfirmationModal from './components/ConfirmationModal/ConfirmationModal';
@@ -347,23 +348,25 @@ function AppContent() {
 function App() {
   return (
     <ThemeControlProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <Toaster 
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#1e293b',
-                color: '#fff',
-                borderRadius: '12px',
-                border: '1px solid rgba(255,255,255,0.1)'
-              },
-            }}
-          />
-          <AppContent />
-        </BrowserRouter>
-      </AuthProvider>
+      <NotificationProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Toaster 
+              position="top-right"
+              toastOptions={{
+                duration: 4000,
+                style: {
+                  background: '#1e293b',
+                  color: '#fff',
+                  borderRadius: '12px',
+                  border: '1px solid rgba(255,255,255,0.1)'
+                },
+              }}
+            />
+            <AppContent />
+          </BrowserRouter>
+        </AuthProvider>
+      </NotificationProvider>
     </ThemeControlProvider>
   );
 }
