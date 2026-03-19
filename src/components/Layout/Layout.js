@@ -55,6 +55,7 @@ const Layout = ({ children, sidebarContent, analyticsContent, bannerContent, mod
           <div className="header-left">
             <IconButton
               className="sidebar-toggle"
+              data-testid="sidebar-toggle-btn"
               onClick={() => setSidebarOpen(!sidebarOpen)}
               sx={{ mr: 1, color: 'var(--text-color)', display: isHub ? 'inline-flex' : 'none' }}
             >
@@ -182,6 +183,7 @@ const Layout = ({ children, sidebarContent, analyticsContent, bannerContent, mod
               <div 
                 className={`sidebar-overlay ${sidebarOpen ? 'is-open' : ''}`} 
                 onClick={() => setSidebarOpen(false)} 
+                data-testid="sidebar-overlay"
               />
               <aside className={`sidebar animate-slide-up delay-100 ${sidebarOpen ? 'is-open' : ''}`}>
                 {sidebarContent}
