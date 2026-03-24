@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Trash2, X as LucideX, Save as LucideSave, Download as LucideDownload } from 'lucide-react';
+import { Mail, Trash2, X as LucideX, Save as LucideSave, Download as LucideDownload, ArrowUp, ArrowDown, ArrowUpDown, Loader2 } from 'lucide-react';
 import PropTypes from 'prop-types';
 import '../../styles/ResultsTable.less';
 
@@ -7,6 +7,7 @@ const ResultsTable = ({
   data, 
   columns, 
   isLoading = false, 
+  isSortLoading = false,
   testIdPrefix = 'results-table',
   currentPage = 1,
   totalItems = 0,
@@ -18,7 +19,10 @@ const ResultsTable = ({
   onResetQuery,
   query,
   onSaveView,
-  onExport
+  onExport,
+  sortField,
+  sortDirection,
+  onSortChange
 }) => {
   const [selectedIds, setSelectedIds] = React.useState([]);
   const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
@@ -113,6 +117,11 @@ const ResultsTable = ({
         </div>
       </div>
       <div className="results-table__container custom-scrollbar">
+        {isSortLoading && (
+          <div className="results-table__sort-overlay">
+            <Loader2 className="sort-spinner" size={28} />
+          </div>
+        )}
         <table
           className="results-table__table"
           data-testid={`${testIdPrefix}-table`}
@@ -126,15 +135,38 @@ const ResultsTable = ({
                   checked={isAllSelected}
                 />
               </th>
-              {columns.map((column) => (
-                <th
-                  key={column.key}
-                  className="results-table__th"
-                  data-testid={`${testIdPrefix}-header-${column.key}`}
-                >
-                  {column.label || column.key}
-                </th>
-              ))}
+              {columns.map((column) => {
+                const isSorted = sortField === column.key;
+                const handleSort = () => {
+                  if (!onSortChange) return;
+                  if (!isSorted) {
+                    onSortChange(column.key, 'asc');
+                  } else if (sortDirection === 'asc') {
+                    onSortChange(column.key, 'desc');
+                  } else {
+                    onSortChange(null, 'asc');
+                  }
+                };
+                return (
+                  <th
+                    key={column.key}
+                    className={`results-table__th sortable ${isSorted ? 'sorted' : ''}`}
+                    data-testid={`${testIdPrefix}-header-${column.key}`}
+                    onClick={handleSort}
+                    role="columnheader"
+                    aria-sort={isSorted ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'}
+                  >
+                    <span className="th-content">
+                      {column.label || column.key}
+                      <span className="sort-indicator">
+                        {isSorted && sortDirection === 'asc' && <ArrowUp size={14} />}
+                        {isSorted && sortDirection === 'desc' && <ArrowDown size={14} />}
+                        {!isSorted && <ArrowUpDown size={14} />}
+                      </span>
+                    </span>
+                  </th>
+                );
+              })}
               <th className="results-table__th actions-cell">Actions</th>
             </tr>
           </thead>
@@ -305,6 +337,10 @@ ResultsTable.propTypes = {
   query: PropTypes.object,
   onSaveView: PropTypes.func,
   onExport: PropTypes.func,
+  sortField: PropTypes.string,
+  sortDirection: PropTypes.string,
+  onSortChange: PropTypes.func,
+  isSortLoading: PropTypes.bool,
 };
 
 export default ResultsTable;

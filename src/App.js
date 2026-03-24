@@ -53,6 +53,34 @@ function AppContent() {
   const [isDataLoading, setIsDataLoading] = useState(true);
   const dataFetchedRef = useRef(false);
 
+  // ── Handle Global Sorting State ─────────────────────────
+  const [sortConfig, setSortConfig] = useState({ field: null, direction: 'asc' });
+  const [isSortLoading, setIsSortLoading] = useState(false);
+
+  const handleSortChange = useCallback((field, direction) => {
+    setSortConfig({ field, direction });
+  }, []);
+
+  // Re-fetch users when sort changes (only for live data)
+  useEffect(() => {
+    if (!isAuthenticated || !dataFetchedRef.current || isLive === null) return;
+
+    if (isLive && sortConfig.field) {
+      setIsSortLoading(true);
+      fetchUsers({ sortBy: sortConfig.field, sortDir: sortConfig.direction })
+        .then(setUsers)
+        .catch(() => { /* keep current data on error */ })
+        .finally(() => setIsSortLoading(false));
+    } else if (isLive && !sortConfig.field) {
+      // Reset to unsorted — re-fetch without sort params
+      setIsSortLoading(true);
+      fetchUsers()
+        .then(setUsers)
+        .catch(() => {})
+        .finally(() => setIsSortLoading(false));
+    }
+  }, [sortConfig, isLive, isAuthenticated]);
+
   // ── Handle Global Filtering State ───────────────────────
   const [query, setQuery] = useState({
     combinator: 'and',
@@ -331,12 +359,15 @@ function AppContent() {
               users={users}
               variables={variables}
               isDataLoading={isDataLoading}
+              isSortLoading={isSortLoading}
               query={query}
               onQueryChange={handleQueryChange}
               onResetQuery={handleResetQuery}
               onBulkDelete={handleBulkDeleteRequested}
               onBulkEmail={handleBulkEmailRequested}
               onSaveView={() => setIsSaveViewModalOpen(true)}
+              sortConfig={sortConfig}
+              onSortChange={handleSortChange}
             />
           } />
           <Route path="/settings/account" element={<ProfileView />} />

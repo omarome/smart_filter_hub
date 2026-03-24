@@ -27,9 +27,12 @@ const CollapsibleList = ({
   users, 
   variables, 
   isDataLoading: isLoading,
+  isSortLoading,
   onBulkDelete,
   onBulkEmail,
-  onSaveView
+  onSaveView,
+  sortConfig,
+  onSortChange
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -85,8 +88,12 @@ const CollapsibleList = ({
       !['id', 'email', 'nickname', 'firstName', 'lastName'].includes(key)
     );
 
-    // Failsafe: Ensure fullName is always present even if the Docker backend hasn't been rebuilt yet
-    if (!keys.includes('fullName')) {
+    // Ensure fullName is always the first column
+    const fullNameIndex = keys.indexOf('fullName');
+    if (fullNameIndex > 0) {
+      keys.splice(fullNameIndex, 1);
+      keys.unshift('fullName');
+    } else if (fullNameIndex === -1) {
       keys.unshift('fullName');
     }
 
@@ -137,8 +144,12 @@ const CollapsibleList = ({
           query={query}
           columns={tableColumns}
           isLoading={isLoading}
+          isSortLoading={isSortLoading}
           onSaveView={onSaveView}
           onExport={handleExport}
+          sortField={sortConfig?.field}
+          sortDirection={sortConfig?.direction}
+          onSortChange={onSortChange}
         />
       </div>
     </div>

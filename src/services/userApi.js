@@ -21,9 +21,19 @@ function getAuthHeader() {
 
 /**
  * Fetches all users from the backend API.
+ * @param {{ sortBy?: string, sortDir?: string }} [sortConfig] optional sort params
  */
-export const fetchUsers = async () => {
-  const response = await fetch(`${API_BASE}/users`, {
+export const fetchUsers = async (sortConfig) => {
+  let url = `${API_BASE}/users`;
+
+  if (sortConfig?.sortBy) {
+    const params = new URLSearchParams();
+    params.set('sortBy', sortConfig.sortBy);
+    if (sortConfig.sortDir) params.set('sortDir', sortConfig.sortDir);
+    url += `?${params.toString()}`;
+  }
+
+  const response = await fetch(url, {
     headers: getAuthHeader()
   });
   if (!response.ok) {
