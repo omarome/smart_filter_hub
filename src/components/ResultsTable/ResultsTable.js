@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Trash2 } from 'lucide-react';
+import { Mail, Trash2, X as LucideX } from 'lucide-react';
 import PropTypes from 'prop-types';
 import '../../styles/ResultsTable.less';
 
@@ -14,7 +14,9 @@ const ResultsTable = ({
   onItemsPerPageChange,
   onPageChange,
   onBulkDelete,
-  onBulkEmail
+  onBulkEmail,
+  onResetQuery,
+  query
 }) => {
   const [selectedIds, setSelectedIds] = React.useState([]);
   const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
@@ -64,22 +66,30 @@ const ResultsTable = ({
   return (
     <div className="results-table insight-table" data-testid={testIdPrefix}>
       <div className="results-table__header section-header">
-
+        <button 
+          className="clear-filters-btn"
+          onClick={onResetQuery}
+          disabled={!query || query.rules.length === 0}
+          title="Clear all filters"
+        >
+          <LucideX size={16} /> Clear Filters
+        </button>
         <div className={`bulk-actions ${selectedIds.length > 0 ? 'active' : ''}`}>
-          <span className="bulk-label">Bulk Actions:</span>
           <button 
             className="bulk-btn email" 
             disabled={selectedIds.length === 0}
             onClick={() => onBulkEmail && onBulkEmail(selectedIds)}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            Email
+            <Mail size={14} /> Email
           </button>
           <button 
             className="bulk-btn delete" 
             disabled={selectedIds.length === 0}
             onClick={() => onBulkDelete && onBulkDelete(selectedIds)}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            Delete
+            <Trash2 size={14} /> Delete
           </button>
         </div>
       </div>
@@ -272,6 +282,8 @@ ResultsTable.propTypes = {
   onPageChange: PropTypes.func,
   onBulkDelete: PropTypes.func,
   onBulkEmail: PropTypes.func,
+  onResetQuery: PropTypes.func,
+  query: PropTypes.object,
 };
 
 export default ResultsTable;

@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { QueryBuilder, ValueEditor } from 'react-querybuilder';
 import PropTypes from 'prop-types';
+import { LucideX, LucideFilter } from 'lucide-react';
 import CollapseButton from '../CollapseButton/CollapseButton';
 import AutocompleteValueEditor from '../AutocompleteValueEditor/AutocompleteValueEditor';
 import { countRules } from '../../utils/queryUtils';
@@ -25,41 +27,32 @@ const QueryBuilderController = ({
   label = 'Advanced filters',
   ...queryBuilderProps
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [localQuery, setLocalQuery] = useState(query);
   const openSuggestionsRef = useRef(new Set());
   const [hasSuggestionsOpen, setHasSuggestionsOpen] = useState(false);
-  const containerRef = useRef(null);
-
-  const initialRuleAddedRef = useRef(false);
 
   const handleToggle = useCallback(() => {
-    const nextExpanded = !isExpanded;
-    setIsExpanded(nextExpanded);
-
-    // Proactively add initial rule on expand if empty
-    if (nextExpanded && query.rules.length === 0 && fields.length > 0) {
-      initialRuleAddedRef.current = true;
-      onQueryChange({
-        ...query,
-        rules: [{ field: fields[0].name, operator: '=', value: '' }]
-      });
+    // When opening, snapshot the current query properties
+    if (!isModalOpen) {
+      if (query.rules.length === 0 && fields.length > 0) {
+        setLocalQuery({
+          ...query,
+          rules: [{ field: fields[0].name, operator: '=', value: '' }]
+        });
+      } else {
+        setLocalQuery(query);
+      }
+      setIsModalOpen(true);
+    } else {
+      setIsModalOpen(false);
     }
+  }, [isModalOpen, query, fields]);
 
-    if (!nextExpanded) {
-      initialRuleAddedRef.current = false;
-    }
-  }, [isExpanded, query, fields, onQueryChange]);
-
-  // Fallback: Add initial rule if fields load AFTER expansion
-  useEffect(() => {
-    if (isExpanded && query.rules.length === 0 && fields.length > 0 && !initialRuleAddedRef.current) {
-      initialRuleAddedRef.current = true;
-      onQueryChange({
-        ...query,
-        rules: [{ field: fields[0].name, operator: '=', value: '' }]
-      });
-    }
-  }, [isExpanded, fields.length, onQueryChange]); // Reduced dependencies to avoid loops
+  const handleApply = useCallback(() => {
+    onQueryChange(localQuery);
+    setIsModalOpen(false);
+  }, [localQuery, onQueryChange]);
 
   // Derive rule count from the query prop (single source of truth)
   const rulesCount = useMemo(() => countRules(query), [query]);
@@ -68,7 +61,7 @@ const QueryBuilderController = ({
   const collapsedLabel = (
     <span className="collapse-button__label-wrapper">
       <span className="collapse-button__label-text">{label}</span>
-      <span className="collapse-button__label-count">[{rulesCount} selected]</span>
+      {rulesCount > 0 && <span className="collapse-button__label-count">[{rulesCount} selected]</span>}
     </span>
   );
 
@@ -143,65 +136,61 @@ const QueryBuilderController = ({
     return 'text';
   }, []);
 
-  // Close panel when clicking outside for better UX
+  // Prevent body scroll when modal is open
   useEffect(() => {
-    if (!isExpanded) return;
-
-    const handleClickOutside = (event) => {
-      if (!containerRef.current) return;
-
-      const target = event.target;
-
-      // Don't close when clicking inside autocomplete suggestions portal
-      if (
-        target &&
-        typeof target.closest === 'function' &&
-        target.closest('.autocomplete-value-editor__suggestions')
-      ) {
-        return;
-      }
-
-      if (!containerRef.current.contains(target)) {
-        setIsExpanded(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside, true);
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside, true);
+      document.body.style.overflow = 'unset';
     };
-  }, [isExpanded]);
+  }, [isModalOpen]);
 
   return (
-    <div
-      className="query-builder-controller"
-      ref={containerRef}
-      data-testid="query-builder-controller"
-    >
+    <div className="query-builder-controller" data-testid="query-builder-controller">
       <CollapseButton
-        isExpanded={isExpanded}
+        isExpanded={isModalOpen}
         onToggle={handleToggle}
         expandedLabel={expandedLabel}
         collapsedLabel={collapsedLabel}
         data-testid="advanced-filters-toggle"
       />
 
-      {isExpanded && (
-        <div
-          className={`query-builder-controller__content ${hasSuggestionsOpen ? 'query-builder-controller__content--has-suggestions' : ''}`}
-          data-testid="query-builder-content"
-        >
-          <QueryBuilder
-            fields={fields}
-            query={query}
-            onQueryChange={onQueryChange}
-            showCombinatorsBetweenRules={true}
-            showNotToggle={true}
-            getValueEditorType={getValueEditorType}
-            controlElements={customControls}
-            {...queryBuilderProps}
-          />
-        </div>
+      {isModalOpen && createPortal(
+        <div className="query-builder-modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div 
+            className="query-builder-modal-content" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="query-builder-modal-header">
+              <h2><LucideFilter size={18} /> {label}</h2>
+              <button className="close-modal-btn" onClick={() => setIsModalOpen(false)}>
+                <LucideX size={20} />
+              </button>
+            </div>
+            
+            <div className={`query-builder-modal-body query-builder-controller__content ${hasSuggestionsOpen ? 'query-builder-controller__content--has-suggestions' : ''}`}>
+              <QueryBuilder
+                fields={fields}
+                query={localQuery}
+                onQueryChange={setLocalQuery}
+                showCombinatorsBetweenRules={true}
+                showNotToggle={true}
+                getValueEditorType={getValueEditorType}
+                controlElements={customControls}
+                {...queryBuilderProps}
+              />
+            </div>
+            
+            <div className="query-builder-modal-footer">
+              <button className="cancel-btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
+              <button className="apply-btn" onClick={handleApply}>Apply Filters</button>
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );

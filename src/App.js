@@ -313,6 +313,9 @@ function AppContent() {
         <QuickFilterBuilder
           query={query}
           onQueryChange={handleQueryChange}
+          onResetQuery={handleResetQuery}
+          variables={variables}
+          users={users}
           savedViews={savedViews}
           onSaveView={() => setIsSaveViewModalOpen(true)}
           onDeleteView={handleDeleteSavedView}

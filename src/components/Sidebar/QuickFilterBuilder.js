@@ -8,11 +8,15 @@ import {
   LucideTrendingDown,
   LucideUserMinus,
   LucideArrowRight,
-  LucideTrash2
+  LucideTrash2,
+  LucideX
 } from 'lucide-react';
+import { buildFieldsFromVariables } from '../../config/queryConfig';
+import { enhanceFieldWithValues } from '../../utils/fieldUtils';
+import QueryBuilderController from '../QueryBuilderController/QueryBuilderController';
 import '../../styles/QuickFilterBuilder.less';
 
-const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView, onDeleteView }) => {
+const QuickFilterBuilder = ({ query, onQueryChange, onResetQuery, variables, users, savedViews = [], onSaveView, onDeleteView }) => {
   // ── Local State for Sidebar ────────────────────────────
   const [localSelectedStatuses, setLocalSelectedStatuses] = useState([]);
   const [localAgeRange, setLocalAgeRange] = useState({ min: '', max: '' });
@@ -113,6 +117,13 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
 
   const isStatusChecked = (status) => localSelectedStatuses.includes(status);
 
+  // ── QueryBuilder Fields Array ──────────────────────────
+  const fields = useMemo(() => {
+    if (!variables || !users) return [];
+    const baseFields = buildFieldsFromVariables(variables);
+    return baseFields.map((field) => enhanceFieldWithValues(users, field));
+  }, [variables, users]);
+
   const [searchQuery, setSearchQuery] = useState('');
 
   // Filter saved views based on search query
@@ -197,6 +208,26 @@ const QuickFilterBuilder = ({ query, onQueryChange, savedViews = [], onSaveView,
               <option value="retired">Retired</option>
             </select>
           </div>
+
+          {/* Build Custom Filter */}
+          <div className="filter-field" style={{ marginTop: '24px' }}>
+            <QueryBuilderController
+              fields={fields}
+              query={query}
+              label="Build Custom Filter"
+              onQueryChange={onQueryChange}
+            />
+          </div>
+
+          <button 
+            className="clear-filters-btn"
+            onClick={onResetQuery}
+            disabled={!query || query.rules.length === 0}
+            title="Clear all filters"
+            style={{ width: '100%', marginTop: '16px' }}
+          >
+            <LucideX size={16} /> Clear Filters
+          </button>
         </div>
       </div>
 

@@ -56,10 +56,10 @@ const Layout = ({ children, sidebarContent, analyticsContent, bannerContent, mod
             <IconButton
               className="sidebar-toggle"
               data-testid="sidebar-toggle-btn"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              sx={{ mr: 1, color: 'var(--text-color)', display: isHub ? 'inline-flex' : 'none' }}
+              onClick={() => setSidebarOpen(true)}
+              sx={{ mr: 1, color: 'var(--text-color)', display: isHub && window.innerWidth < 1024 ? 'inline-flex' : 'none' }}
             >
-              {sidebarOpen ? <LucideX size={24} /> : <LucideMenu size={24} />}
+              <LucideMenu size={24} />
             </IconButton>
             <div className="logo-box" onClick={() => navigate('/')}>
               <LucideLayers size={24} />

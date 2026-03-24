@@ -90,3 +90,32 @@ body.dark-mode {
 .delay-400 {
   animation-delay: 400ms;
 }
+
+// Clear Filters Action Button
+.clear-filters-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--border-radius-custom, 8px);
+  border: 1px solid var(--error-focus-rgba);
+  background-color: transparent;
+  color: var(--error-color);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover:not(:disabled) {
+    background-color: var(--error-focus-rgba);
+    border-color: var(--error-color);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--border-color);
+    color: var(--text-muted);
+  }
+}

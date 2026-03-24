@@ -2,7 +2,6 @@ import React, { useCallback, useState, useMemo, useEffect, useRef } from 'react'
 import 'react-querybuilder/dist/query-builder.css';
 import { LucideSave, LucideDownload, LucideX } from 'lucide-react';
 
-import QueryBuilderController from '../QueryBuilderController/QueryBuilderController';
 import ResultsTable from '../ResultsTable/ResultsTable';
 import { filterData } from '../../utils/queryFilter';
 import { fetchUsers, fetchVariables } from '../../services/userApi';
@@ -107,23 +106,7 @@ const CollapsibleList = ({
     <div className="collapsible-list insight-hub-wrapper" data-testid="collapsible-list">
       
       <div className="main-actions-row animate-slide-up delay-300">
-        <div className="primary-actions-group">
-          <QueryBuilderController
-            fields={fields}
-            query={query}
-            label="Advanced filters"
-            onQueryChange={handleQueryChange}
-          />
-          <button 
-            className="action-btn clear-filters-btn"
-            onClick={onResetQuery}
-            title="Clear all filters"
-          >
-            <LucideX size={16} /> 
-            Clear Filters
-          </button>
-        </div>
-        <div className="secondary-actions">
+        <div className="secondary-actions" style={{ marginLeft: 'auto' }}>
            <button 
              className="action-btn border-btn"
              onClick={onSaveView}
@@ -152,6 +135,8 @@ const CollapsibleList = ({
           onPageChange={handlePageChange}
           onBulkDelete={onBulkDelete}
           onBulkEmail={onBulkEmail}
+          onResetQuery={onResetQuery}
+          query={query}
           columns={tableColumns}
           isLoading={isLoading}
         />
