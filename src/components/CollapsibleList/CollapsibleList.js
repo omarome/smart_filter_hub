@@ -104,9 +104,8 @@ const CollapsibleList = ({
 
   return (
     <div className="collapsible-list insight-hub-wrapper" data-testid="collapsible-list">
-      
-      <div className="main-actions-row animate-slide-up delay-300">
-        <div className="secondary-actions" style={{ marginLeft: 'auto' }}>
+      <div className="main-actions-row mobile-only-actions animate-slide-up delay-300">
+        <div className="secondary-actions" style={{ marginLeft: 'auto', marginBottom: '16px' }}>
            <button 
              className="action-btn border-btn"
              onClick={onSaveView}
@@ -124,7 +123,6 @@ const CollapsibleList = ({
            </button>
         </div>
       </div>
-
       <div className="results-container animate-fade delay-400">
         <ResultsTable
           data={paginatedData}
@@ -139,6 +137,8 @@ const CollapsibleList = ({
           query={query}
           columns={tableColumns}
           isLoading={isLoading}
+          onSaveView={onSaveView}
+          onExport={handleExport}
         />
       </div>
     </div>

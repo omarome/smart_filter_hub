@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Trash2, X as LucideX } from 'lucide-react';
+import { Mail, Trash2, X as LucideX, Save as LucideSave, Download as LucideDownload } from 'lucide-react';
 import PropTypes from 'prop-types';
 import '../../styles/ResultsTable.less';
 
@@ -16,7 +16,9 @@ const ResultsTable = ({
   onBulkDelete,
   onBulkEmail,
   onResetQuery,
-  query
+  query,
+  onSaveView,
+  onExport
 }) => {
   const [selectedIds, setSelectedIds] = React.useState([]);
   const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
@@ -74,7 +76,23 @@ const ResultsTable = ({
         >
           <LucideX size={16} /> Clear Filters
         </button>
-        <div className={`bulk-actions ${selectedIds.length > 0 ? 'active' : ''}`}>
+        <div className="header-actions-right" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div className="secondary-actions desktop-only-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button 
+              className="desktop-header-btn"
+              onClick={onSaveView}
+            >
+              <LucideSave size={14} /> Save View
+            </button>
+            <button 
+              className="desktop-header-btn"
+              onClick={onExport}
+              title="Export current view to CSV"
+            >
+              <LucideDownload size={14} /> Export
+            </button>
+          </div>
+          <div className={`bulk-actions ${selectedIds.length > 0 ? 'active' : ''}`}>
           <button 
             className="bulk-btn email" 
             disabled={selectedIds.length === 0}
@@ -91,6 +109,7 @@ const ResultsTable = ({
           >
             <Trash2 size={14} /> Delete
           </button>
+        </div>
         </div>
       </div>
       <div className="results-table__container custom-scrollbar">
@@ -284,6 +303,8 @@ ResultsTable.propTypes = {
   onBulkEmail: PropTypes.func,
   onResetQuery: PropTypes.func,
   query: PropTypes.object,
+  onSaveView: PropTypes.func,
+  onExport: PropTypes.func,
 };
 
 export default ResultsTable;
