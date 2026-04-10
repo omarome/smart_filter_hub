@@ -66,6 +66,45 @@ function FilterDropdownChip({ value, options, onSelect, placeholder = 'All' }) {
   );
 }
 
+// ── Internal: probability heat-zone segments ──────────────────────────────────
+const PROB_ZONES = [
+  { key: 'low',  label: 'Low',  range: '< 25%',  operator: '<',       value: '25',    color: '#ef4444', bg: 'rgba(239,68,68,0.12)',   border: 'rgba(239,68,68,0.35)'   },
+  { key: 'fair', label: 'Fair', range: '25–50%', operator: 'between', value: '25,50', color: '#f97316', bg: 'rgba(249,115,22,0.12)',  border: 'rgba(249,115,22,0.35)'  },
+  { key: 'good', label: 'Good', range: '50–75%', operator: 'between', value: '50,75', color: '#3b82f6', bg: 'rgba(59,130,246,0.12)',  border: 'rgba(59,130,246,0.35)'  },
+  { key: 'high', label: 'High', range: '> 75%',  operator: '>=',      value: '75',    color: '#10b981', bg: 'rgba(16,185,129,0.12)',  border: 'rgba(16,185,129,0.35)'  },
+];
+
+function ProbabilityHeatChip({ rule, onSelect }) {
+  const activeKey = rule ? PROB_ZONES.find(z => z.operator === rule.operator && z.value === rule.value)?.key : null;
+
+  return (
+    <div className="prob-heat-strip">
+      {PROB_ZONES.map((zone, i) => {
+        const active = activeKey === zone.key;
+        return (
+          <button
+            key={zone.key}
+            className={`prob-zone ${active ? 'is-active' : ''}`}
+            style={{
+              '--zone-color':  zone.color,
+              '--zone-bg':     active ? zone.bg     : 'transparent',
+              '--zone-border': active ? zone.border : 'transparent',
+              borderRadius: i === 0 ? '6px 0 0 6px' : i === PROB_ZONES.length - 1 ? '0 6px 6px 0' : '0',
+            }}
+            onClick={() => onSelect(active ? null : zone)}
+            aria-pressed={active}
+            title={zone.range}
+          >
+            <span className="prob-zone__dot" />
+            <span className="prob-zone__label">{zone.label}</span>
+            <span className="prob-zone__range">{zone.range}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 // ── Internal: bucket pill row (employee count / deal value) ───────────────────
 function BucketPills({ buckets, value, onChange }) {
   return (
@@ -180,8 +219,13 @@ const InlineFilterBar = ({ query, onQueryChange, onResetQuery, fields = [], quic
     const rules = [...(query?.rules || [])];
     const idx = rules.findIndex(r => r.field === field.name);
 
+    // value may be null/empty (clear) or a { operator, value } zone object (heat chip)
     if (!value || value === '' || (Array.isArray(value) && value.length === 0)) {
       if (idx > -1) rules.splice(idx, 1);
+    } else if (typeof value === 'object' && value.operator) {
+      const rule = { field: field.name, operator: value.operator, value: value.value };
+      if (idx > -1) rules[idx] = rule;
+      else rules.push(rule);
     } else {
       const operator = Array.isArray(value) || field.type === 'list' || field.type === 'multiselect' ? 'in' : '=';
       const val = Array.isArray(value) ? value.join(',') : value;
@@ -197,7 +241,19 @@ const InlineFilterBar = ({ query, onQueryChange, onResetQuery, fields = [], quic
     <FilterShell activeCount={activeCount} onClear={onResetQuery}>
       {heroFieldConfigs.map(field => {
         const rule = getRuleForField(field.name);
-        // Handle both comma-separated strings and arrays
+
+        if (field.chipType === 'probability-heat') {
+          return (
+            <React.Fragment key={field.name}>
+              <div className="filter-group">
+                <span className="group-label">{field.label}</span>
+                <ProbabilityHeatChip rule={rule} onSelect={(zone) => updateRule(field, zone)} />
+              </div>
+              <div className="filter-divider" />
+            </React.Fragment>
+          );
+        }
+
         const rawValue = rule?.value || '';
         const currentSelected = typeof rawValue === 'string' ? (rawValue ? rawValue.split(',') : []) : (Array.isArray(rawValue) ? rawValue : []);
 

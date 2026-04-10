@@ -321,6 +321,68 @@
   flex-shrink: 0;
 }
 
+// ── Probability heat-zone strip ───────────────────────────────
+.prob-heat-strip {
+  display: flex;
+  align-items: stretch;
+  border: 1.5px solid var(--border-color);
+  border-radius: 7px;
+  overflow: hidden;
+  height: 26px;
+}
+
+.prob-zone {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 9px;
+  background: var(--zone-bg, transparent);
+  border: none;
+  border-right: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+  position: relative;
+
+  &:last-child { border-right: none; }
+
+  &:hover {
+    background: color-mix(in srgb, var(--zone-color) 10%, transparent);
+  }
+
+  &.is-active {
+    background: var(--zone-bg);
+    border-right-color: var(--zone-border);
+  }
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--zone-color);
+    flex-shrink: 0;
+    opacity: 0.85;
+
+    .is-active & { opacity: 1; }
+  }
+
+  &__label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--zone-color);
+    letter-spacing: 0.02em;
+  }
+
+  &__range {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    opacity: 0.75;
+
+    .is-active & { opacity: 1; color: var(--zone-color); }
+  }
+}
+
 // ── Bucket pills (employee count / deal value) ────────────────
 // Reuse .status-pill shell but no dot, active = primary color
 .bucket-pill {

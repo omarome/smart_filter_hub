@@ -97,6 +97,10 @@ const fieldEditorOverrides = {
     ],
     operators: selectOperators,
   },
+  probability: {
+    chipType: 'probability-heat',
+    chipPlaceholder: 'Any Probability',
+  },
   lifecycleStage: {
     valueEditorType: 'select',
     chipPlaceholder: 'All Stages',

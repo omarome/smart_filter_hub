@@ -14,7 +14,7 @@ import { exportToCSV } from '../../utils/exportUtils';
 import { buildFieldsFromVariables } from '../../config/queryConfig';
 import { enhanceFieldWithValues } from '../../utils/fieldUtils';
 
-const OrganizationsList = ({ query, onQueryChange, onResetQuery, variables, users }) => {
+const OrganizationsList = ({ query, onQueryChange, onResetQuery, variables, users, onSaveView }) => {
   // ── Server-side data ─────────────────────────────────────────────────────
   const [data, setData]                 = useState([]);
   const [totalElements, setTotalElements] = useState(0);
@@ -181,7 +181,7 @@ const OrganizationsList = ({ query, onQueryChange, onResetQuery, variables, user
           sortDirection={sortDirection}
           onSortChange={(field, dir) => { setSortField(field); setSortDirection(dir); }}
           onExport={() => exportToCSV(data, 'organizations_export')}
-          onSaveView={() => window.dispatchEvent(new CustomEvent('salesOpenSaveView'))}
+          onSaveView={onSaveView}
           onResetQuery={onResetQuery}
           onBulkDelete={handleBulkDeleteRequested}
           onBulkEmail={handleBulkEmailRequested}
