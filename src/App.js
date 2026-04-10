@@ -93,21 +93,20 @@ function AppContent() {
     }
   }, [sortConfig, isLive, isAuthenticated]);
 
-  // ── Handle Global Filtering State ───────────────────────
-  const [query, setQuery] = useState({
-    combinator: 'and',
-    rules: [],
-  });
+  // ── Per-tab independent filter state ────────────────────
+  const emptyQuery = { combinator: 'and', rules: [] };
+  const [queries, setQueries] = useState({});
 
-  const handleQueryChange = useCallback((newQuery) => {
-    setQuery(newQuery);
+  const getQuery = useCallback((path) => {
+    return queries[path] || emptyQuery;
+  }, [queries]);
+
+  const handleQueryChange = useCallback((path, newQuery) => {
+    setQueries(prev => ({ ...prev, [path]: newQuery }));
   }, []);
 
-  const handleResetQuery = useCallback(() => {
-    setQuery({
-      combinator: 'and',
-      rules: [],
-    });
+  const handleResetQuery = useCallback((path) => {
+    setQueries(prev => ({ ...prev, [path]: emptyQuery }));
   }, []);
 
   // ── Modal State & Handlers ──────────────────────────────
@@ -280,10 +279,10 @@ function AppContent() {
         message={`Are you sure you want to delete ${itemsToDelete.length} ${itemsToDelete.length === 1 ? 'item' : 'items'}? This action cannot be undone.`}
         confirmText="Confirm Delete"
       />
-      <SavedViewModal 
+      <SavedViewModal
         isOpen={isSaveViewModalOpen}
         onClose={() => setIsSaveViewModalOpen(false)}
-        query={query}
+        query={getQuery(location.pathname)}
         onSave={handleSaveView}
       />
     </>
@@ -306,9 +305,9 @@ function AppContent() {
               return (
                 <QuickFilterBuilder
                   entityType={entityType}
-                  query={query}
-                  onQueryChange={handleQueryChange}
-                  onResetQuery={handleResetQuery}
+                  query={getQuery(path)}
+                  onQueryChange={(q) => handleQueryChange(path, q)}
+                  onResetQuery={() => handleResetQuery(path)}
                   variables={variables}
                   users={users}
                   savedViews={savedViews}
@@ -332,9 +331,9 @@ function AppContent() {
               variables={variables}
               isDataLoading={isDataLoading}
               isSortLoading={isSortLoading}
-              query={query}
-              onQueryChange={handleQueryChange}
-              onResetQuery={handleResetQuery}
+              query={getQuery('/directory')}
+              onQueryChange={(q) => handleQueryChange('/directory', q)}
+              onResetQuery={() => handleResetQuery('/directory')}
               onBulkDelete={handleBulkDeleteRequested}
               onBulkEmail={handleBulkEmailRequested}
               onSaveView={() => setIsSaveViewModalOpen(true)}
@@ -343,10 +342,10 @@ function AppContent() {
             />
           } />
           <Route path="/team" element={<TeamPage />} />
-          <Route path="/sales/organizations" element={<OrganizationsList query={query} onQueryChange={handleQueryChange} onResetQuery={handleResetQuery} variables={variables} users={users} />} />
-          <Route path="/sales/contacts" element={<ContactsList query={query} onQueryChange={handleQueryChange} onResetQuery={handleResetQuery} variables={variables} users={users} />} />
-          <Route path="/sales/opportunities" element={<OpportunitiesList query={query} onQueryChange={handleQueryChange} onResetQuery={handleResetQuery} variables={variables} users={users} />} />
-          <Route path="/sales/pipeline" element={<PipelinePage query={query} onQueryChange={handleQueryChange} onResetQuery={handleResetQuery} variables={variables} users={users} />} />
+          <Route path="/sales/organizations" element={<OrganizationsList query={getQuery('/sales/organizations')} onQueryChange={(q) => handleQueryChange('/sales/organizations', q)} onResetQuery={() => handleResetQuery('/sales/organizations')} variables={variables} users={users} />} />
+          <Route path="/sales/contacts" element={<ContactsList query={getQuery('/sales/contacts')} onQueryChange={(q) => handleQueryChange('/sales/contacts', q)} onResetQuery={() => handleResetQuery('/sales/contacts')} variables={variables} users={users} />} />
+          <Route path="/sales/opportunities" element={<OpportunitiesList query={getQuery('/sales/opportunities')} onQueryChange={(q) => handleQueryChange('/sales/opportunities', q)} onResetQuery={() => handleResetQuery('/sales/opportunities')} variables={variables} users={users} />} />
+          <Route path="/sales/pipeline" element={<PipelinePage query={getQuery('/sales/pipeline')} onQueryChange={(q) => handleQueryChange('/sales/pipeline', q)} onResetQuery={() => handleResetQuery('/sales/pipeline')} variables={variables} users={users} />} />
           <Route path="/sales/dashboard" element={<SalesDashboard />} />
           <Route path="/automations" element={<AutomationsPage />} />
           <Route path="/segments" element={<CrmQueryPage />} />

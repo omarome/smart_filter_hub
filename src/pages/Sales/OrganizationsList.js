@@ -47,8 +47,8 @@ const OrganizationsList = ({ query, onQueryChange, onResetQuery, variables, user
   const fields = useMemo(() => {
     if (!entityFields.length) return [];
     const baseFields = buildFieldsFromVariables(entityFields);
-    return baseFields.map((field) => enhanceFieldWithValues(users || [], field));
-  }, [entityFields, users]);
+    return baseFields.map((field) => enhanceFieldWithValues(data, field));
+  }, [entityFields, data]);
 
   useEffect(() => {
     fetchFieldsForEntity('ORGANIZATION')
@@ -163,6 +163,7 @@ const OrganizationsList = ({ query, onQueryChange, onResetQuery, variables, user
         query={query}
         onQueryChange={onQueryChange}
         onResetQuery={onResetQuery}
+        quickFilters={['industry', 'lifecycleStage']}
       />
 
       <div style={{ flex: 1, minHeight: 0 }}>
