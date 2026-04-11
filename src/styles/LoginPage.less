@@ -1,26 +1,35 @@
 @import './variables.less';
 
 /* ── LoginPage Styles ─────────────────────────────────────── */
+
+// Page shell — column layout so footer never overlaps content
 .login-page {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   background: @background-gradient-light;
-  padding: 1rem;
-  transition: background 0.3s ease;
+  padding: 4rem 1rem 1.5rem;
   position: relative;
+  transition: background 0.3s ease;
+  box-sizing: border-box;
 
   .dark-mode & {
     background: @background-gradient-dark;
   }
+
+  // Tighten top padding on small screens
+  @media (max-width: 480px) {
+    padding-top: 3rem;
+  }
 }
 
+// Theme toggle — stays at top-right corner, never in flow
 .login-theme-toggle {
   position: absolute !important;
-  top: 1.5rem;
-  right: 1.5rem;
-  z-index: 1000;
+  top: 1.25rem;
+  right: 1.25rem;
+  z-index: 10;
   color: @text-muted;
   background: rgba(0, 0, 0, 0.04) !important;
   backdrop-filter: @glass-blur;
@@ -41,57 +50,114 @@
   }
 }
 
-.login-card {
-  max-width: 440px;
+// Main content area — grows to fill available space, vertically centers card
+.login-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 2.5rem 2rem;
+  max-width: 440px;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+// ── Brand header (above the card) ────────────────────────────────────────────
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: fadeUp 0.5s ease-out both;
+}
+
+.login-brand-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.35);
+}
+
+.login-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.login-brand-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: var(--text-color);
+  font-family: @font-family;
+
+  .dark-mode & {
+    color: #fff;
+  }
+}
+
+.login-brand-tagline {
+  font-size: 0.8rem;
+  color: @text-muted;
+  margin: 0;
+  line-height: 1.3;
+
+  .dark-mode & {
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+// ── Login card ────────────────────────────────────────────────────────────────
+.login-card {
+  width: 100%;
+  padding: 2rem 2rem 2rem;
   border-radius: 16px !important;
   background: @glass-bg-light !important;
   backdrop-filter: @glass-blur;
   border: 1px solid @glass-border-light;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   color: @text-color !important;
   transition: all 0.3s ease;
+  box-sizing: border-box;
 
   .dark-mode & {
     background: @glass-bg-dark !important;
     border-color: @glass-border-dark;
     color: #fff !important;
   }
-}
 
-.login-icon-wrapper {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.25rem;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-.login-icon {
-  color: #fff;
-  font-size: 28px !important;
+  @media (max-width: 480px) {
+    padding: 1.5rem 1.25rem;
+    border-radius: 12px !important;
+  }
 }
 
 .login-title {
-  font-weight: 700 !important;
-  margin-bottom: 0.25rem !important;
-  letter-spacing: -0.5px;
-  color: inherit !important;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 0.2rem;
+  letter-spacing: -0.4px;
+  color: inherit;
+  font-family: @font-family;
+  align-self: flex-start;
 }
 
 .login-subtitle {
-  color: @text-muted !important;
-  margin-bottom: 1.5rem !important;
+  font-size: 0.85rem;
+  color: @text-muted;
+  margin: 0 0 1.5rem;
+  align-self: flex-start;
 
   .dark-mode & {
-    color: rgba(255, 255, 255, 0.6) !important;
+    color: rgba(255, 255, 255, 0.6);
   }
 }
 
@@ -212,11 +278,14 @@
 }
 
 .login-footer {
-  margin-top: 1.5rem !important;
-  color: @text-muted !important;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+  color: @text-muted;
+  text-align: center;
 
   .dark-mode & {
-    color: rgba(255, 255, 255, 0.5) !important;
+    color: rgba(255, 255, 255, 0.5);
   }
 
   .MuiLink-root {
@@ -230,25 +299,134 @@
   }
 }
 
-// ── Auth page footer (copyright + legal links) ────────────────────────────────
+// ── Feature highlights below the card ─────────────────────────────────────────
+.login-about-anchor {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeUp 0.6s 0.15s both ease-out;
+}
+
+.login-about-label {
+  display: block;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: @text-muted;
+
+  .dark-mode & {
+    color: rgba(255, 255, 255, 0.35);
+  }
+}
+
+.login-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+
+  @media (max-width: 380px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.login-info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+  padding: 10px 12px;
+  transition: transform 0.2s ease, background 0.2s ease;
+
+  .dark-mode & {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.09);
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.65);
+
+    .dark-mode & {
+      background: rgba(255, 255, 255, 0.07);
+    }
+  }
+}
+
+.info-card-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: rgba(124, 105, 239, 0.1);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+
+  .dark-mode & {
+    background: rgba(125, 145, 241, 0.15);
+    color: var(--primary-color);
+  }
+}
+
+.info-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.info-card-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: @text-color;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+
+  .dark-mode & {
+    color: #fff;
+  }
+}
+
+.info-card-desc {
+  font-size: 0.74rem;
+  color: @text-muted;
+  line-height: 1.35;
+  display: block;
+
+  .dark-mode & {
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+// ── Page footer — in normal flow, never overlaps ───────────────────────────────
 .auth-page-footer {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 0;
-  right: 0;
+  width: 100%;
+  max-width: 440px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  pointer-events: none; // let clicks pass through to the page
+  padding: 1.25rem 0 0.5rem;
+  margin-top: 0.5rem;
 
   .auth-page-footer-copy {
-    color: rgba(0, 0, 0, 0.3) !important;
-    font-size: 0.72rem !important;
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 0.7rem;
     letter-spacing: 0.01em;
+    font-family: @font-family;
 
     .dark-mode & {
-      color: rgba(255, 255, 255, 0.22) !important;
+      color: rgba(255, 255, 255, 0.22);
     }
   }
 
@@ -256,12 +434,11 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    pointer-events: all;
   }
 
   .auth-page-footer-sep {
     color: rgba(0, 0, 0, 0.2);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
 
     .dark-mode & {
       color: rgba(255, 255, 255, 0.18);
@@ -269,20 +446,26 @@
   }
 
   .auth-page-footer-link {
-    font-size: 0.72rem !important;
-    color: rgba(0, 0, 0, 0.35) !important;
+    font-size: 0.7rem;
+    color: rgba(0, 0, 0, 0.35);
+    text-decoration: none;
     transition: color 0.15s ease;
 
     .dark-mode & {
-      color: rgba(255, 255, 255, 0.28) !important;
+      color: rgba(255, 255, 255, 0.28);
     }
 
     &:hover {
-      color: rgba(0, 0, 0, 0.6) !important;
+      color: rgba(0, 0, 0, 0.6);
 
       .dark-mode & {
-        color: rgba(255, 255, 255, 0.55) !important;
+        color: rgba(255, 255, 255, 0.55);
       }
     }
   }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

@@ -10,6 +10,9 @@ import {
   LucideDownload,
   LucideMail,
   LucideChevronRight,
+  LucideDatabase,
+  LucideLayers,
+  LucideBell,
 } from 'lucide-react';
 import './UserGuidePage.less';
 
@@ -138,6 +141,51 @@ export default function UserGuidePage() {
         <p className="ug-subtitle">
           Everything you need to get the most out of HumintFlow — from filtering contacts to automating your pipeline.
         </p>
+      </div>
+
+      <div className="ug-intro-section">
+        <h2 className="ug-intro-title">Welcome to HumintFlow CRM</h2>
+        <p className="ug-intro-text">
+          A unified workspace for your sales team — combining contact management, deal tracking, advanced segmentation, and real-time notifications in one place.
+        </p>
+        <div className="ug-intro-highlights">
+          <div className="ug-intro-highlight">
+            <div className="ug-intro-highlight-icon" style={{ '--h-color': '#7c69ef' }}>
+              <LucideDatabase size={15} />
+            </div>
+            <div className="ug-intro-highlight-body">
+              <span className="ug-intro-highlight-label">Unified data</span>
+              <span className="ug-intro-highlight-desc">Contacts, Orgs, Deals — all linked</span>
+            </div>
+          </div>
+          <div className="ug-intro-highlight">
+            <div className="ug-intro-highlight-icon" style={{ '--h-color': '#ec4899' }}>
+              <LucideLayers size={15} />
+            </div>
+            <div className="ug-intro-highlight-body">
+              <span className="ug-intro-highlight-label">Nested filters</span>
+              <span className="ug-intro-highlight-desc">AND / OR Query Builder with saved views</span>
+            </div>
+          </div>
+          <div className="ug-intro-highlight">
+            <div className="ug-intro-highlight-icon" style={{ '--h-color': '#f59e0b' }}>
+              <LucideZap size={15} />
+            </div>
+            <div className="ug-intro-highlight-body">
+              <span className="ug-intro-highlight-label">Automations</span>
+              <span className="ug-intro-highlight-desc">No-code triggers on data changes</span>
+            </div>
+          </div>
+          <div className="ug-intro-highlight">
+            <div className="ug-intro-highlight-icon" style={{ '--h-color': '#10b981' }}>
+              <LucideBell size={15} />
+            </div>
+            <div className="ug-intro-highlight-body">
+              <span className="ug-intro-highlight-label">Live alerts</span>
+              <span className="ug-intro-highlight-desc">FCM push notifications for the team</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="ug-grid">
