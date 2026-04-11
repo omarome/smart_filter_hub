@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { auth, googleProvider } from '../config/firebase';
-import { signInWithEmailAndPassword, signInWithPopup, createUserWithEmailAndPassword, signOut, onIdTokenChanged, getIdToken, updateProfile as firebaseUpdateProfile } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, createUserWithEmailAndPassword, signOut, onIdTokenChanged, getIdToken, updateProfile as firebaseUpdateProfile, deleteUser } from 'firebase/auth';
+import { deleteAccountApi } from '../services/authApi';
 
 const AuthContext = createContext(null);
 
@@ -75,7 +76,23 @@ export function AuthProvider({ children }) {
   }, []);
 
   const deleteAccount = useCallback(async () => {
-     // Keep empty or call backend then auth.currentUser.delete()
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) throw new Error('Not authenticated');
+
+    // Get a fresh token — deletion requires a recent sign-in
+    const token = await getIdToken(firebaseUser, true);
+    _accessToken = token;
+
+    // 1. Delete from backend (clears DB records, refresh tokens, etc.)
+    await deleteAccountApi(token);
+
+    // 2. Delete from Firebase Auth
+    await deleteUser(firebaseUser);
+
+    // 3. Clear local state
+    _accessToken = null;
+    localStorage.removeItem('accessToken');
+    setUser(null);
   }, []);
 
   const handleOAuthSuccess = useCallback(async () => {}, []);

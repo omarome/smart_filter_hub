@@ -144,7 +144,17 @@ export default function ProfileView() {
             Permanently delete your account and all associated data.
           </p>
           <div className="profile-settings__footer">
-            <button className="delete-btn" onClick={() => { if (window.confirm('Are you sure? This cannot be undone.')) deleteAccount(); }}>
+            <button className="delete-btn" onClick={async () => {
+              if (!window.confirm('Are you sure? This cannot be undone.')) return;
+              try {
+                await deleteAccount();
+                navigate('/');
+              } catch (err) {
+                alert(err?.message?.includes('recent')
+                  ? 'Please sign out and sign back in before deleting your account.'
+                  : (err?.message || 'Failed to delete account. Please try again.'));
+              }
+            }}>
               <LucideTrash2 size={16} /> Delete Account
             </button>
           </div>
